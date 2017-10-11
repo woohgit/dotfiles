@@ -212,3 +212,8 @@ alias bmax="sudo /usr/bin/keyboard_brightness.sh max"
 alias boff="sudo /usr/bin/keyboard_brightness.sh off"
 alias bup="sudo /usr/bin/keyboard_brightness.sh up"
 alias bdown="sudo /usr/bin/keyboard_brightness.sh down"
+
+pgrep conky > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+	~/.start_conky.sh > /dev/null 2>&1
+fi
