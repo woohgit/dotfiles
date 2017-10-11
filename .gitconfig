@@ -9,6 +9,9 @@
 [rebase]
 	autostash = true
 [alias]
+	st = status
+	co = checkout
+	up = pull
         undo-commit = reset --soft HEAD^
 [filter "media"]
         required = true
