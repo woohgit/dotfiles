@@ -1,0 +1,29 @@
+[user]
+        name = Adam Papai
+        email = wooh@wooh.hu
+	signingkey = 45ADDC77
+[push]
+        default = tracking
+[pull]
+	rebase = true
+[rebase]
+	autostash = true
+[alias]
+        undo-commit = reset --soft HEAD^
+[filter "media"]
+        required = true
+        clean = git media clean %f
+        smudge = git media smudge %f
+[filter "lfs"]
+        clean = git-lfs clean %f
+        smudge = git-lfs smudge %f
+        required = true
+[merge]
+        tool = opendiff
+[diff]
+        tool = opendiff
+[commit]
+        gpgsign = true
+[core]
+	editor = subl -n -w
+	whitespace = trailing-space,space-before-tab
