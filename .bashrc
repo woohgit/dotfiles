@@ -123,7 +123,9 @@ fi
 # - opscore
 # - secrets-api
 # - go
-export PATH=$PATH:$HOME/devops-ninja-tools/bin:$HOME/devops-ninja-tools/bin/aws:$HOME/repos/dna/scripts:/usr/local/terraform/bin/:$HOME/secrets-api/bin:$HOME/devops-ninja-tools/bin/jenkins:$HOME/.git-radar:$HOME/.opscore:/usr/local/go/bin
+# - terraform
+# - vault
+export PATH=$PATH:$HOME/devops-ninja-tools/bin:$HOME/devops-ninja-tools/bin/aws:$HOME/repos/dna/scripts:$HOME/secrets-api/bin:$HOME/devops-ninja-tools/bin/jenkins:$HOME/.git-radar:$HOME/.opscore:/usr/local/go/bin
 
 # git radar PS1
 export PS1="$PS1\$(git-radar --bash --fetch) "
@@ -139,7 +141,7 @@ eval $(gpg-agent --daemon)
 
 # upgrade opscore and terraform
 update-tools() {
-	sudo ~/upgrade-terraform
+	~/upgrade-terraform
 	opscore update
 	touch ~/.tools_updated
 }
