@@ -75,7 +75,7 @@ conky.config = {
 };
 
 conky.text = [[
-${image 000000-0.5.png -p 0,0 -s 350x900}
+${image 000000-0.6.png -p 0,0 -s 350x900}
 ${font Ubuntu:bold:size=10}${color4}SYSTEM ${hr 2}
 ${offset 15}${font Ubuntu:size=10}${color1}$sysname $kernel
 ${offset 15}${font Ubuntu:size=10}${color1}$nodename
