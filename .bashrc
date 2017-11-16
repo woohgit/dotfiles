@@ -122,10 +122,10 @@ fi
 # - devops-ninja-tools
 # - opscore
 # - secrets-api
-# - go
+# - go1.9
 # - terraform
 # - vault
-export PATH=$PATH:$HOME/devops-ninja-tools/bin:$HOME/devops-ninja-tools/bin/aws:$HOME/repos/dna/scripts:$HOME/secrets-api/bin:$HOME/devops-ninja-tools/bin/jenkins:$HOME/.git-radar:$HOME/.opscore:/usr/local/go/bin
+export PATH=$PATH:$HOME/devops-ninja-tools/bin:$HOME/devops-ninja-tools/bin/aws:$HOME/repos/dna/scripts:$HOME/secrets-api/bin:$HOME/devops-ninja-tools/bin/jenkins:$HOME/.git-radar:$HOME/.opscore:/usr/lib/go-1.9/bin
 
 # git radar PS1
 export PS1="$PS1\$(git-radar --bash --fetch) "
