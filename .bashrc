@@ -136,6 +136,8 @@ export TERM="xterm-256color"
 eval $(ssh-agent)
 eval $(gpg-agent --daemon)
 
+export GPG_TTY=$(tty)
+
 # add both ssh-keys
 # ssh-add ~/.ssh/id_rsa ~/.ssh/id_rsa.wooh
 
@@ -209,11 +211,9 @@ alias envv3="source $HOME/venvv3/bin/activate"
 
 
 # keyboard backlit for chromebooks on GalliumOS
-alias bon="sudo /usr/bin/keyboard_brightness.sh on"
-alias bmax="sudo /usr/bin/keyboard_brightness.sh max"
-alias boff="sudo /usr/bin/keyboard_brightness.sh off"
-alias bup="sudo /usr/bin/keyboard_brightness.sh up"
-alias bdown="sudo /usr/bin/keyboard_brightness.sh down"
+alias bon="echo 50 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
+alias bmax="echo 100 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
+alias boff="echo 0 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
 
 pgrep conky > /dev/null 2>&1
 if [ $? -ne 0 ]; then
