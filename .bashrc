@@ -214,6 +214,7 @@ alias envv3="source $HOME/venvv3/bin/activate"
 alias bon="echo 50 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
 alias bmax="echo 100 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
 alias boff="echo 0 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
+alias opscore-local="/home/wooh/repos/opscore/bin/linux_amd64/opscore"
 
 pgrep conky > /dev/null 2>&1
 if [ $? -ne 0 ]; then
