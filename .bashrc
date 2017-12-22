@@ -215,6 +215,42 @@ alias bon="echo 50 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightn
 alias bmax="echo 100 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
 alias boff="echo 0 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
 alias opscore-local="/home/wooh/repos/opscore/bin/linux_amd64/opscore"
+alias capsoff="python -c 'from ctypes import *; X11 = cdll.LoadLibrary(\"libX11.so.6\"); display = X11.XOpenDisplay(None); X11.XkbLockModifiers(display, c_uint(0x0100), c_uint(2), c_uint(0)); X11.XCloseDisplay(display)'"
+alias fixmousespeed="xinput --set-prop 9 'libinput Accel Speed' -1"
+alias iam-refresh=iam-refresh
+
+
+# iam refresh
+
+iam-refresh() {
+	opscore iam refresh --account $1 --role infra-admin
+}
+
+
+# base64 encoding
+
+b64() {
+	echo -n $1 | base64
+}
+
+
+update_kops() {
+	current=$(kops version | cut -d ' ' -f 2)
+	latest=$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)
+	if [[ $current != $latest ]]; then
+		echo "Updating kops from $current to $latest"
+		curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+		chmod +x kops-linux-amd64
+		sudo mv kops-linux-amd64 /usr/local/bin/kops
+	else
+		echo "kops is up to date ($current)"
+	fi
+}
+
+
+alias b64=b64
+alias update_kops=update_kops
+
 
 pgrep conky > /dev/null 2>&1
 if [ $? -ne 0 ]; then

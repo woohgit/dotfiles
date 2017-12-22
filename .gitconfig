@@ -28,5 +28,5 @@
 [commit]
         gpgsign = true
 [core]
-	editor = subl -n -w
+	editor = vim
 	whitespace = trailing-space,space-before-tab
