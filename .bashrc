@@ -211,13 +211,22 @@ alias envv3="source $HOME/venvv3/bin/activate"
 
 
 # keyboard backlit for chromebooks on GalliumOS
-alias bon="echo 50 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
-alias bmax="echo 100 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
-alias boff="echo 0 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
+#alias bon="echo 50 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
+#alias bmax="echo 100 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
+#alias boff="echo 0 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
+
 alias opscore-local="/home/wooh/repos/opscore/bin/linux_amd64/opscore"
 alias capsoff="python -c 'from ctypes import *; X11 = cdll.LoadLibrary(\"libX11.so.6\"); display = X11.XOpenDisplay(None); X11.XkbLockModifiers(display, c_uint(0x0100), c_uint(2), c_uint(0)); X11.XCloseDisplay(display)'"
 alias fixmousespeed="xinput --set-prop 9 'libinput Accel Speed' -1"
 alias iam-refresh=iam-refresh
+alias connect-nagios="opscore server connect --name prd-nagios-ops-01"
+alias connect-chatops="opscore server connect --name prd-chatops-ops-02"
+alias aws-terminate-instance="aws ec2 terminate-instances --region us-east-1 --instance-id "
+alias consul-list-instances-tst="AWS_PROFILE=cloudbees-test aws ec2 describe-instances --region us-east-1 --filters \"Name=tag:Name,Values=tst-app-consul\" | jq '.Reservations[].Instances[] | \"\(.InstanceId) \(.NetworkInterfaces[].PrivateIpAddresses[].PrivateIpAddress) \(.State.Name) \(.ImageId)\"' -r"
+alias consul-list-instances-prd="AWS_PROFILE=cloudbees-main aws ec2 describe-instances --region us-east-1 --filters \"Name=tag:Name,Values=prd-app-consul\" | jq '.Reservations[].Instances[] | \"\(.InstanceId) \(.NetworkInterfaces[].PrivateIpAddresses[].PrivateIpAddress) \(.State.Name) \(.ImageId)\"' -r"
+alias consul-list-raft-peers-prd="opscore-local consul raft-list-peers --account cloudbees-main --name prd-app-consul"
+alias consul-list-raft-peers-tst="opscore-local consul raft-list-peers --account cloudbees-test --name tst-app-consul"
+alias ipconnect="opscore server connect --ip "
 
 
 # iam refresh
@@ -256,3 +265,8 @@ pgrep conky > /dev/null 2>&1
 if [ $? -ne 0 ]; then
 	~/.start_conky.sh > /dev/null 2>&1
 fi
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
