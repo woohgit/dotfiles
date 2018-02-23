@@ -159,7 +159,7 @@ export PS1="$PS1\$(git-radar --bash --fetch) "
 export TERM="screen-256color"
 
 # start ssh-agent and gpg-daemon
-eval $(ssh-agent)
+. /home/wooh/repos/dotfiles/bin/reuse_ssh_agent.sh
 eval $(gpg-agent --daemon)
 
 export GPG_TTY=$(tty)
@@ -253,6 +253,8 @@ alias aws-terminate-instance="aws ec2 terminate-instances --region us-east-1 --i
 alias consul-list-raft-peers-prd="opscore-local consul raft-list-peers --account cloudbees-main --name prd-app-consul"
 alias consul-list-raft-peers-tst="opscore-local consul raft-list-peers --account cloudbees-test --name tst-app-consul"
 alias ipconnect="opscore server connect --ip "
+alias pacup="sudo pacman -Syu"
+alias aurup="pacaur -Syu"
 
 
 # iam refresh
