@@ -10,6 +10,6 @@ screen -t ops-projects 	0
 screen -t repos 	1
 screen -t opscore 	2
 screen -t ops-servers 	3
-screen -t irssi 	4	irssi
-screen -t twitter 	5	/home/wooh/venvv3/bin/rainbowstream
+#screen -t irssi 	4	irssi
+#screen -t twitter 	5	/home/wooh/venvv3/bin/rainbowstream
 screen -t sysmon        6       /home/wooh/venvv2/bin/glances

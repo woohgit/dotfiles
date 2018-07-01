@@ -117,24 +117,24 @@ shopt -s histappend
 # # usage: ex <file>
 ex ()
 {
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1     ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *)           echo "'$1' cannot be extracted via ex()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
+	if [ -f $1 ] ; then
+		case $1 in
+			*.tar.bz2)   tar xjf $1   ;;
+			*.tar.gz)    tar xzf $1   ;;
+			*.bz2)       bunzip2 $1   ;;
+			*.rar)       unrar x $1     ;;
+			*.gz)        gunzip $1    ;;
+			*.tar)       tar xf $1    ;;
+			*.tbz2)      tar xjf $1   ;;
+			*.tgz)       tar xzf $1   ;;
+			*.zip)       unzip $1     ;;
+			*.Z)         uncompress $1;;
+			*.7z)        7z x $1      ;;
+			*)           echo "'$1' cannot be extracted via ex()" ;;
+		esac
+	else
+		echo "'$1' is not a valid file"
+	fi
 }
 
 # better yaourt colors
@@ -189,12 +189,12 @@ fi
 
 # opscore connect to AWS instance
 cbconnect() {
-  opscore server connect --name $1
+	opscore server connect --name $1
 }
 
 # opscore connect to jenkins-master
 cm() {
-  opscore dac-prod jm ssh $1
+	opscore dac-prod jm ssh $1
 }
 
 
@@ -227,8 +227,12 @@ alias vpon="sudo systemctl start openvpn-client@ops.service"
 alias vpoff="sudo systemctl stop openvpn-client@ops.service"
 
 # dac VPN
-alias dvpon="sudo systemctl start openvpn@dac.service"
-alias dvpoff="sudo systemctl stop openvpn@dac.service"
+alias dvpon="sudo systemctl start openvpn-client@dac.service"
+alias dvpoff="sudo systemctl stop openvpn-client@dac.service"
+
+# test ops VPN
+alias tvpon="sudo systemctl start openvpn-client@test.service"
+alias tvpoff="sudo systemctl stop openvpn-client@test.service"
 
 
 # python virtualenvs
@@ -237,11 +241,12 @@ alias envv3="source $HOME/venvv3/bin/activate"
 
 
 # keyboard backlit for chromebooks on GalliumOS
-#alias bon="echo 50 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
-#alias bmax="echo 100 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
-#alias boff="echo 0 | sudo tee -a /sys/class/leds/chromeos::kbd_backlight/brightness"
+#alias bon="echo 1 | sudo tee -a /sys/class/leds/tpacpi::kbd_backlight/brightness"
+#alias bmax="echo 2 | sudo tee -a /sys/class/leds/tpacpi::kbd_backlight/brightness"
+#alias boff="echo 0 | sudo tee -a /sys/class/leds/tpacpi::kbd_backlight/brightness"
 
-alias opscore-local="/home/wooh/repos/opscore/bin/linux_amd64/opscore"
+alias opscore-local="/home/wooh/repos/golib/src/github.com/cloudbees/opscore/bin/linux_amd64/opscore"
+alias ol=opscore-local
 alias capsoff="python -c 'from ctypes import *; X11 = cdll.LoadLibrary(\"libX11.so.6\"); display = X11.XOpenDisplay(None); X11.XkbLockModifiers(display, c_uint(0x0100), c_uint(2), c_uint(0)); X11.XCloseDisplay(display)'"
 alias fixmousespeed="xinput --set-prop 13 'libinput Accel Speed' -1"
 alias iam-refresh=iam-refresh
@@ -257,29 +262,123 @@ alias consul-list-raft-peers-tst="opscore-local consul raft-list-peers --account
 alias ipconnect="opscore server connect --ip "
 alias pacup="sudo pacman -Syu"
 alias aurup="pacaur -Syu"
+alias clear-pacman-cache="pacaur -Scc"
+alias twitter="/home/wooh/venvv3/bin/rainbowstream"
+alias aws2fa="ykman --device 03504957 oath code --single \"Amazon Web Services\""
+alias all2fa="ykman --device 03504957 oath code"
+alias ec2-update-cache=ec2-update-cache
+alias pip-upgrade-outdated=pip-upgrade-outdated
+alias b64=b64
+alias terraform-import-dns-record=terraform-import-dns-record
+alias tsp="make env=staging plan"
+alias tsa="make env=staging apply"
+alias tpp="make env=production plan"
+alias tpa="make env=production apply"
+alias generate-migration-list=generate-migration-list
+alias import-domain-records=import-domain-records
+alias import-domain-zone=import-domain-zone
+alias docker-prune="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc:ro -e FORCE_CONTAINER_REMOVAL=1 -e GRACE_PERIOD_SECONDS=60 spotify/docker-gc"
 
+# usage:
+# import-domain-zone [TF_ENV] [RESOURCE-ID] [ZONE-ID]
+# import-domain-zone production jenkinsx_org Z2T2F3PWFZEWGI
+import-domain-zone() {
+	make env=$1 resource-name=aws_route53_zone.$2 resource-id=$3 import
+}
+
+# usage:
+# import-domain-records [FILENAME] [RECORD-TYPE] [ZONE-ID]
+# import-domain-records www.tf A Z2T2F3PWFZEWGI
+import-domain-records() {
+	if [[ "$#" -lt 3 ]]; then
+		echo "Missing arguments"
+		echo "Usage: import-domain-records filename [RECORD-TYPE] [ZONE_ID]"
+	fi
+	generate-migration-list $1
+	while read a; do terraform-import-dns-record ${a} $2 $3; done < recordlist.txt
+}
+
+generate-migration-list() {
+	cat $1 | grep 'name' | awk '{print $3}' | tr -d '\"' | sed s'/.$//' > recordlist.txt
+}
+
+# usage:
+# terraform-import-dns-record [RESOURCE-ID] beescloud.com MX [ZONE-ID]
+# terraform-import-dns-record beescloud_com_mx beescloud.com MX
+terraform-import-dns-record() {
+	echo "Number of arguments: $#"
+
+	if [[ "$#" -lt 3 ]]; then
+		echo "usage: terraform-import-dns-record [RESOURCE-ID] [FQDN] [RECORD-TYPE] [ZONE-ID]"
+		echo "       terraform-import-dns-record xy_beescloud_com xy.beescloud.com CNAME XYZABCDEFG"
+		echo "       terraform-import-dns-record mx_beescloud_com beescloud.com MX XYZABCDEFG"
+		echo "       terraform-import-dns-record xyz_beescloud_com CNAME XYZABCDEFG"
+		echo "Arguments: $@"
+	fi
+
+	# cloudbees.com
+	# ZONE_ID=Z3M0JFT3O7DA33
+
+	TF_ENV=production
+
+	if [[ "$#" -eq 4 ]]; then
+		RECORD_ID=$1
+		NAME=$2
+		RECORD_TYPE=$3
+		ZONE_ID=$4
+	else
+		NAME=$1
+		# change . and - to _ ex: what-ever.beescloud.com => what_ever_beescloud.com
+		RECORD_ID=$(echo $1 | sed -e 's/\*/star/g' |  sed -e 's/\./_/g' | sed -e 's/-/_/g')
+		RECORD_TYPE=$2
+		ZONE_ID=$3
+	fi
+
+	make env=${TF_ENV} resource-name=aws_route53_record.${RECORD_ID} resource-id=${ZONE_ID}_${NAME}._${RECORD_TYPE} import
+}
+
+pip-upgrade-outdated() {
+	pip install --upgrade $(pip list --outdated | awk '{print $1}' | tr '\n' ' ')
+}
+
+# opscore update ec2 cache
+ec2-update-cache() {
+	opscore ec2 update-cache --account $1
+}
 
 # iam refresh
-
 iam-refresh() {
 	opscore iam refresh --account $1 --role infra-admin
 }
 
 
 # base64 encoding
-
 b64() {
 	echo -n $1 | base64
 }
 
+function setgov ()
+{
+        echo "$1" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor 
+}
 
-alias b64=b64
+function coverage() {
+	go test -v -cover -coverprofile=coverage.out
+	cat coverage.out | sed s:_/home/wooh/repos/opscore/:github.com/cloudbees/opscore/:g > cover.out
+	go tool cover -html=cover.out
+}
 
+alias setgov=setgov
 
-#pgrep conky > /dev/null 2>&1
-#if [ $? -ne 0 ]; then
-#	~/.start_conky.sh > /dev/null 2>&1
-#fi
+pgrep xbindkeys > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+	xbindkeys &
+fi
+
+pgrep conky > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+	~/.start_conky.sh > /dev/null 2>&1
+fi
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 
@@ -294,3 +393,4 @@ export DefaultIMModule=fcitx
 
 export GPG_AGENT_INFO=/usr/lib/systemd/user/gpg-agent.socket
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
+export HISTSIZE=10000

@@ -30,3 +30,5 @@
 [core]
 	editor = vim
 	whitespace = trailing-space,space-before-tab
+[help]
+	autocorrect = 1
