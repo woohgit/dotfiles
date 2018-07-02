@@ -112,10 +112,10 @@ ${offset 15}${font Ubuntu:bold:size=9}${color1}Free: ${font Ubuntu:size=9}${fs_f
 ${voffset 43}
 ${offset 90}${font Ubuntu:bold:size=10}${color5}ETHERNET
 ${voffset 40}             
-${offset 15}${color1}${font Ubuntu:bold:size=9}Up: ${alignr}${font Ubuntu:size=9}$color2${upspeed wlp1s0} / ${totalup}
-${offset 15}${upspeedgraph wlp1s0 40,285 4B1B0C FF5C2B 100 -l}
-${offset 15}${color1}${font Ubuntu:bold:size=9}Down: ${alignr}${font Ubuntu:size=9}$color2${downspeed wlp1s0} / ${totaldown}
-${offset 15}${downspeedgraph wlp1s0 40,285 324D23 77B753 100 -l}
+${offset 15}${color1}${font Ubuntu:bold:size=9}Up: ${alignr}${font Ubuntu:size=9}$color2${upspeed wlp2s0} / ${totalup}
+${offset 15}${upspeedgraph wlp2s0 40,285 4B1B0C FF5C2B 100 -l}
+${offset 15}${color1}${font Ubuntu:bold:size=9}Down: ${alignr}${font Ubuntu:size=9}$color2${downspeed wlp2s0} / ${totaldown}
+${offset 15}${downspeedgraph wlp2s0 40,285 324D23 77B753 100 -l}
 
 ${offset 90}${font Ubuntu:bold:size=10}${color5}BATTERY
 ${offset 15}${font Ubuntu:size=10}${color1}${alignr}$battery
