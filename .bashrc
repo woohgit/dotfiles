@@ -378,6 +378,9 @@ fi
 pgrep conky > /dev/null 2>&1
 if [ $? -ne 0 ]; then
 	~/.start_conky.sh > /dev/null 2>&1
+	pushd ~/.conky/Rings
+	LC_ALL=en_US.UTF-8 conky -c rings &
+	popd
 fi
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
