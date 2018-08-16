@@ -158,18 +158,15 @@ export PS1="$PS1\$(git-radar --bash --fetch) "
 # export TERM="xterm-256color"
 export TERM="screen-256color"
 
-# start ssh-agent and gpg-daemon
-. /home/wooh/repos/dotfiles/bin/reuse_ssh_agent.sh
-eval $(gpg-agent --daemon)
-
-export GPG_TTY=$(tty)
-
-# add both ssh-keys
-# ssh-add ~/.ssh/id_rsa ~/.ssh/id_rsa.wooh
+# SSH uses GPG as of now
+gpg-agent --daemon
+export GPG_TTY="$(tty)"
+export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
+gpg-connect-agent updatestartuptty /bye
 
 # upgrade opscore and terraform
 update-tools() {
-	~/upgrade-terraform
+	~/upgrade-hashicorp
 	opscore update
 	touch ~/.tools_updated
 }
@@ -278,6 +275,10 @@ alias generate-migration-list=generate-migration-list
 alias import-domain-records=import-domain-records
 alias import-domain-zone=import-domain-zone
 alias docker-prune="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc:ro -e FORCE_CONTAINER_REMOVAL=1 -e GRACE_PERIOD_SECONDS=60 spotify/docker-gc"
+alias getjiras="opscore jira list  --mine | grep -v '\---' | sed 's/\x1b\[[0-9;]*m//g' | egrep -v '(^$|^#)'"
+alias vault_latest="curl -fsS https://api.github.com/repos/hashicorp/vault/tags | jq -re '.[].name' | sed 's/^v\(.*\)$/\1/g' | sort -Vr | head -1"
+alias consul_latest="curl -fsS https://api.github.com/repos/hashicorp/consul/tags | jq -re '.[].name' | sed 's/^v\(.*\)$/\1/g' | sort -Vr | head -1"
+alias update_notes="/home/wooh/.conky/update_notes.sh"
 
 # usage:
 # import-domain-zone [TF_ENV] [RESOURCE-ID] [ZONE-ID]
@@ -359,7 +360,7 @@ b64() {
 
 function setgov ()
 {
-        echo "$1" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor 
+        echo "$1" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
 function coverage() {

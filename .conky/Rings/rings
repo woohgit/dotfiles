@@ -53,7 +53,7 @@ conky.config = {
 };
 
 conky.text = [[
-${image 000000-0.6.png -p 0,0 -s 850x600}
+${image 000000-0.6.png -p 0,0 -s 850x800}
 ${voffset -20}${font Santana:size=12}  Root   ${fs_used /}/${fs_size /}$font
 ${voffset 105}${goto 123}${font Santana:size=24}${time %H:%M}${voffset -10}${font Santana:size=10}${font}
 ${voffset -28}${goto 298}${hr 2}
