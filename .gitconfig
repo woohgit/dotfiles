@@ -12,6 +12,9 @@
 	st = status
 	co = checkout
 	up = pull
+	l = log -p
+	p = push
+	pf = push -f
   undo-commit = reset --soft HEAD^
 [filter "media"]
   required = true
