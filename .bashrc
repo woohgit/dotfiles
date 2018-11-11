@@ -310,4 +310,3 @@ export DefaultIMModule=fcitx
 export GPG_AGENT_INFO=/usr/lib/systemd/user/gpg-agent.socket
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export HISTSIZE=10000
-''
