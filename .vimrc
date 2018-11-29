@@ -12,6 +12,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'kien/ctrlp.vim' 
+Plugin 'tpope/vim-speeddating'
+Plugin 'jceb/vim-orgmode'
 
 "html
 "  isnowfy only compatible with python not python3
@@ -55,6 +57,8 @@ let g:SimpylFold_docstring_preview = 1
 "custom keys
 let mapleader=" "
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"
+let maplocalleader="\\"
 "
 call togglebg#map("<F5>")
 "colorscheme zenburn

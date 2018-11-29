@@ -6,20 +6,32 @@ term screen-256color
 hardstatus alwayslastline
 hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W}%c %{g}]'
 
+chdir /home/wooh/repos/development
+screen -t org 	0
+
 chdir /home/wooh/repos/ops-projects
-screen -t ops-projects 	0
+screen -t ops-projects 	1
 
 chdir /home/wooh/repos
-screen -t repos 	1
+screen -t repos 	2
 
 chdir /home/wooh/repos/golib/src/github.com/cloudbees/opscore
-screen -t opscore 	2
+screen -t opscore 	3
 
 chdir /home/wooh/repos/ops-servers/servers
-screen -t ops-servers 	3
+screen -t ops-servers 	4
 
-screen -t sysmon        6       s-tui
+chdir /home/wooh/repos/ops-network/
+screen -t ops-network  5
 
-#screen -t irssi 	4	irssi
-#screen -t twitter 	5	/home/wooh/venvv3/bin/rainbowstream
+chdir /home/wooh/repos/ops-iam/
+screen -t ops-iam  6
 
+chdir /home/wooh/repos/ops-ecs/
+screen -t ops-ecs  7
+
+chdir /home/wooh/repos/ops-servers/
+screen -t ops-servers  7
+
+chdir /home/wooh/
+screen -t sysmon        10       s-tui

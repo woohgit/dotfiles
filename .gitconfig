@@ -35,3 +35,5 @@
   whitespace = trailing-space,space-before-tab
 [help]
   autocorrect = 1
+[remind]
+  paths = /home/wooh/repos/ops-*,/home/wooh/repos/golib/src/github.com/cloudbees/opscore,/home/wooh/repos/ansible-devenv,/home/wooh/repos/dotfiles,/home/wooh/repos/secrets-store-ops-secure,/home/wooh/repos/woocommerce-otpbank-payment-gateway,/home/wooh/repos/cloudbees-jenkins-ops-library/
