@@ -176,16 +176,16 @@ update-tools() {
 }
 
 # check for upgrades
-if [ ! -f ~/.tools_updated ]; then
-	update-tools
-else
-	mod_date=`stat -c %Y ~/.tools_updated`
-	now_date=`date +%s`
-	let "diff = $now_date - $mod_date"
-	if [ $diff -gt 86400 ]; then
-		update-tools
-	fi
-fi
+#if [ ! -f ~/.tools_updated ]; then
+#	update-tools
+#else
+#	mod_date=`stat -c %Y ~/.tools_updated`
+#	now_date=`date +%s`
+#	let "diff = $now_date - $mod_date"
+#	if [ $diff -gt 86400 ]; then
+#		update-tools
+#	fi
+#fi
 
 # opscore connect to AWS instance
 cbconnect() {
