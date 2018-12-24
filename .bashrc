@@ -248,9 +248,9 @@ alias b64=b64
 alias terraform-import-dns-record=terraform-import-dns-record
 
 # terraform
-alias tsp="make env=staging plan"
+alias tsp="make env=staging use_landscape=true plan"
 alias tsa="make env=staging apply"
-alias tpp="make env=production plan"
+alias tpp="make env=production use_landscape=true plan"
 alias tpa="make env=production apply"
 
 # docker prune
