@@ -15,7 +15,7 @@ screen -t ops-projects 	1
 chdir /home/wooh/repos
 screen -t repos 	2
 
-chdir /home/wooh/repos/golib/src/github.com/cloudbees/opscore
+chdir /home/wooh/repos/ops-machinery/opscore
 screen -t opscore 	3
 
 chdir /home/wooh/repos/ops-servers/servers
