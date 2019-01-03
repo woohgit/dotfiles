@@ -214,7 +214,7 @@ alias envv2="source $HOME/venvv2/bin/activate"
 alias envv3="source $HOME/venvv3/bin/activate"
 
 # opscore aliases
-alias ol="/home/wooh/repos/golib/src/github.com/cloudbees/opscore/bin/linux_amd64/opscore"
+alias ol="/home/wooh/repos/ops-machinery/opscore/bin/linux_amd64/opscore"
 alias opscore-local="echo opscore-local is deprecated, use ol"
 alias iam-refresh=iam-refresh
 alias connect-nagios="opscore server connect --name prd-nagios-ops-01 --account cloudbees-main"
