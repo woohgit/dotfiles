@@ -6,32 +6,35 @@ term screen-256color
 hardstatus alwayslastline
 hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W}%c %{g}]'
 
-chdir /home/wooh/repos/development
-screen -t org 	0
+chdir /home/wooh/repos/ansible-devenv
+screen -t devenv 	0
 
 chdir /home/wooh/repos/ops-projects
-screen -t ops-projects 	1
+screen -t projects 	1
 
 chdir /home/wooh/repos
 screen -t repos 	2
 
-chdir /home/wooh/repos/ops-machinery/opscore
-screen -t opscore 	3
+chdir /home/wooh/repos/ops-machinery/
+screen -t machinery 	3
+
+chdir /home/wooh/repos/ops-machinery/
+screen -t machinery 	4
+
+chdir /home/wooh/repos/ops-machinery/
+screen -t machinery 	5
 
 chdir /home/wooh/repos/ops-servers/servers
-screen -t ops-servers 	4
+screen -t servers 	6
 
 chdir /home/wooh/repos/ops-network/
-screen -t ops-network  5
+screen -t network  7
 
 chdir /home/wooh/repos/ops-iam/
-screen -t ops-iam  6
+screen -t iam  8
 
 chdir /home/wooh/repos/ops-ecs/
-screen -t ops-ecs  7
-
-chdir /home/wooh/repos/ops-servers/
-screen -t ops-servers  7
+screen -t ecs  9
 
 chdir /home/wooh/
 screen -t sysmon        10       s-tui
