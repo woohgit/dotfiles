@@ -265,6 +265,7 @@ alias consul_latest="curl -fsS https://api.github.com/repos/hashicorp/consul/tag
 
 # not sure if I'll really use this
 alias update_notes="/home/wooh/.conky/update_notes.sh"
+alias jira-schedule=jira-schedule
 
 fetch-aws-instance-id-by-ip() {
 	aws ec2 --region=us-east-1 describe-instances --filters "Name=network-interface.addresses.private-ip-address, Values=$1" | jq '.Reservations[].Instances[].InstanceId' -r
@@ -290,6 +291,11 @@ coverage() {
 	go test -v -cover -coverprofile=coverage.out
 	cat coverage.out | sed s:_/home/wooh/repos/opscore/:github.com/cloudbees/opscore/:g > cover.out
 	go tool cover -html=cover.out
+}
+
+# jira schedule
+jira-schedule() {
+	opscore jira schedule --this --take --story-points 1 --issue $1
 }
 
 if [[ "$CONKY_ENABLED" -eq 1 ]]; then
