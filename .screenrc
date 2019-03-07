@@ -18,8 +18,8 @@ screen -t repos 	2
 chdir /home/wooh/repos/ops-machinery/
 screen -t machinery 	3
 
-chdir /home/wooh/repos/ops-machinery/
-screen -t machinery 	4
+chdir /home/wooh/Music/ShuujiSensei
+screen -t shuujisensei 	4
 
 chdir /home/wooh/repos/ops-machinery/
 screen -t machinery 	5

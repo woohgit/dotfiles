@@ -248,10 +248,11 @@ alias b64=b64
 alias terraform-import-dns-record=terraform-import-dns-record
 
 # terraform
-alias tsp="make env=staging use_landscape=true plan"
-alias tsa="make env=staging apply"
-alias tpp="make env=production use_landscape=true plan"
-alias tpa="make env=production apply"
+alias terraform-staging-plan="make env=staging use_landscape=true plan"
+alias terraform-staging-apply="make env=staging apply"
+alias terraform-production-plan="make env=production use_landscape=true plan"
+alias terraform-production-apply="make env=production apply"
+alias terraform-plan="make use_landscape=true plan"
 
 # docker prune
 alias docker-prune="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc:ro -e FORCE_CONTAINER_REMOVAL=1 -e GRACE_PERIOD_SECONDS=60 spotify/docker-gc"
