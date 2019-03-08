@@ -35,6 +35,3 @@ screen -t iam  8
 
 chdir /home/wooh/repos/ops-ecs/
 screen -t ecs  9
-
-chdir /home/wooh/
-screen -t sysmon        10       s-tui
