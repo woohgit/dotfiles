@@ -21,16 +21,7 @@ function upgrade() {
 	rm "$tooling-$version".zip
 }
 
-
-version=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r ".current_version")
-current_version=$(terraform --version | grep 'Terraform' | cut -d ' ' -f 2  |  cut -c 2-)
-
-if [ "$version" != "$current_version" ]; then
-	upgrade "terraform" "$version" "$current_version"
-else
-	echo "Terraform is up to date: $current_version"
-fi
-
+tfenv install latest
 
 version=$(curl -fsS https://api.github.com/repos/hashicorp/vault/tags | jq -re '.[].name' | sed 's/^v\(.*\)$/\1/g' | sort -Vr | grep -v 'beta' | head -1)
 current_version=$(vault version | cut -d ' ' -f 2  | cut -c 2-)

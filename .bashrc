@@ -151,7 +151,7 @@ export CONKY_ENABLED=0
 # - secrets-api
 # - go
 # - hashicorp tools
-export PATH=$PATH:$HOME/devops-ninja-tools/bin:$HOME/devops-ninja-tools/bin/aws:$HOME/repos/dna/scripts:$HOME/secrets-api/bin:$HOME/devops-ninja-tools/bin/jenkins:$HOME/.git-radar:$HOME/.opscore:/usr/lib/go/bin
+export PATH=$PATH:$HOME/devops-ninja-tools/bin:$HOME/devops-ninja-tools/bin/aws:$HOME/repos/dna/scripts:$HOME/secrets-api/bin:$HOME/devops-ninja-tools/bin/jenkins:$HOME/.git-radar:$HOME/.opscore:/usr/lib/go/bin:$HOME/.jce/pse_1.11.16/bin
 
 # only update it every 30min
 export GIT_RADAR_FETCH_TIME=1800
@@ -197,6 +197,9 @@ alias cbconnect=cbconnect
 # go development, common shared libs
 export GOPATH="/home/wooh/repos/golib"
 export PATH="$PATH:$GOPATH/bin"
+
+# tfenv
+export PATH="$HOME/.tfenv/bin:$PATH"
 
 # jenkins-ops triggers
 alias pnc="opscore jenkins trigger --name devops-ninja-tools/job/ping-nagios --parameter-name SEVERITY --parameter-value critical"
@@ -267,6 +270,7 @@ alias consul_latest="curl -fsS https://api.github.com/repos/hashicorp/consul/tag
 # not sure if I'll really use this
 alias update_notes="/home/wooh/.conky/update_notes.sh"
 alias jira-schedule=jira-schedule
+alias kubectl=/usr/bin/kubectl
 
 fetch-aws-instance-id-by-ip() {
 	aws ec2 --region=us-east-1 describe-instances --filters "Name=network-interface.addresses.private-ip-address, Values=$1" | jq '.Reservations[].Instances[].InstanceId' -r
