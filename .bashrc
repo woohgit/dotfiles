@@ -93,6 +93,7 @@ unset use_color safe_term match_lhs sh
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
+alias np='nano -w PKGBUILD'
 alias more=less
 
 xhost +local:root > /dev/null 2>&1
@@ -117,25 +118,26 @@ shopt -s histappend
 # # usage: ex <file>
 ex ()
 {
-	if [ -f $1 ] ; then
-		case $1 in
-			*.tar.bz2)   tar xjf $1   ;;
-			*.tar.gz)    tar xzf $1   ;;
-			*.bz2)       bunzip2 $1   ;;
-			*.rar)       unrar x $1     ;;
-			*.gz)        gunzip $1    ;;
-			*.tar)       tar xf $1    ;;
-			*.tbz2)      tar xjf $1   ;;
-			*.tgz)       tar xzf $1   ;;
-			*.zip)       unzip $1     ;;
-			*.Z)         uncompress $1;;
-			*.7z)        7z x $1      ;;
-			*)           echo "'$1' cannot be extracted via ex()" ;;
-		esac
-	else
-		echo "'$1' is not a valid file"
-	fi
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1   ;;
+      *.tar.gz)    tar xzf $1   ;;
+      *.bz2)       bunzip2 $1   ;;
+      *.rar)       unrar x $1     ;;
+      *.gz)        gunzip $1    ;;
+      *.tar)       tar xf $1    ;;
+      *.tbz2)      tar xjf $1   ;;
+      *.tgz)       tar xzf $1   ;;
+      *.zip)       unzip $1     ;;
+      *.Z)         uncompress $1;;
+      *.7z)        7z x $1      ;;
+      *)           echo "'$1' cannot be extracted via ex()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
 }
+
 
 # better yaourt colors
 export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
@@ -151,13 +153,25 @@ export CONKY_ENABLED=0
 # - secrets-api
 # - go
 # - hashicorp tools
-export PATH=$PATH:$HOME/devops-ninja-tools/bin:$HOME/devops-ninja-tools/bin/aws:$HOME/repos/dna/scripts:$HOME/secrets-api/bin:$HOME/devops-ninja-tools/bin/jenkins:$HOME/.git-radar:$HOME/.opscore:/usr/lib/go/bin:$HOME/.jce/pse_1.11.16/bin
+export PATH=$PATH:$HOME/devops-ninja-tools/bin:$HOME/devops-ninja-tools/bin/aws:$HOME/repos/dna/scripts:$HOME/devops-ninja-tools/bin/jenkins:$HOME/.git-radar:$HOME/.opscore:/usr/lib/go/bin:$HOME/.jce/pse_1.11.16/bin
 
 # only update it every 30min
 export GIT_RADAR_FETCH_TIME=1800
 
+prompt_k8s(){
+    if [[ $K8S_PS1 == 1 ]]; then
+        k8s_current_context=$(kubectl config current-context 2> /dev/null)
+        if [[ $? -eq 0 ]] ; then echo -e "(${k8s_current_context}) "; fi
+    fi
+}
+
 # git radar PS1
 export PS1="$PS1\$(git-radar --bash --fetch) "
+PS1+='$(prompt_k8s)'
+
+#source '/opt/kube-ps1/kube-ps1.sh'
+#export PS1="$PS1 $(kube_ps1) "
+
 
 # export TERM="xterm-256color"
 export TERM="screen-256color"
@@ -192,7 +206,12 @@ cbconnect() {
 	opscore server connect --name $1
 }
 
+oc() {
+  opscore server connect --ip $1
+}
+
 alias cbconnect=cbconnect
+alias oc=oc
 
 # go development, common shared libs
 export GOPATH="/home/wooh/repos/golib"
@@ -270,7 +289,7 @@ alias consul_latest="curl -fsS https://api.github.com/repos/hashicorp/consul/tag
 # not sure if I'll really use this
 alias update_notes="/home/wooh/.conky/update_notes.sh"
 alias jira-schedule=jira-schedule
-alias kubectl=/usr/bin/kubectl
+alias xclip="xclip -selection c"
 
 fetch-aws-instance-id-by-ip() {
 	aws ec2 --region=us-east-1 describe-instances --filters "Name=network-interface.addresses.private-ip-address, Values=$1" | jq '.Reservations[].Instances[].InstanceId' -r
@@ -303,6 +322,22 @@ jira-schedule() {
 	opscore jira schedule --this --take --story-points 1 --issue $1
 }
 
+# production native vault
+production-vault() {
+	VAULT_ADDR="https://vault.cloudbees.com" \
+	HTTP_PROXY="http://vault-proxy.cloudbees.com:3128" \
+	vault $*
+}
+
+# staging native vault
+staging-vault() {
+	VAULT_ADDR="https://vault.beescloud.com" \
+	vault $*
+}
+
+alias prod-vault=production-vault
+alias staging-vault=staging-vault
+
 if [[ "$CONKY_ENABLED" -eq 1 ]]; then
 	pgrep conky > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
@@ -313,6 +348,19 @@ if [[ "$CONKY_ENABLED" -eq 1 ]]; then
 	fi
 fi
 
+enable_k8s_ps1() {
+	export K8S_PS1=1
+}
+
+alias enable_k8s_ps1=enable_k8s_ps1
+
+disable_k8s_ps1() {
+	export K8S_PS1=0
+}
+alias disable_k8s_ps1=disable_k8s_ps1
+alias k=kubectl
+
+
 export XMODIFIERS=@im=fcitx
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
@@ -321,3 +369,13 @@ export DefaultIMModule=fcitx
 export GPG_AGENT_INFO=/usr/lib/systemd/user/gpg-agent.socket
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export HISTSIZE=10000
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/wooh/.opscore/google-cloud-sdk/path.bash.inc' ]; then . '/home/wooh/.opscore/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/wooh/.opscore/google-cloud-sdk/completion.bash.inc' ]; then . '/home/wooh/.opscore/google-cloud-sdk/completion.bash.inc'; fi
+
+# tabtab source for electron-forge package
+# uninstall by removing these lines or running `tabtab uninstall electron-forge`
+# [ -f /home/wooh/repos/Cerebral/node_modules/tabtab/.completions/electron-forge.bash ] && . /home/wooh/repos/Cerebral/node_modules/tabtab/.completions/electron-forge.bash

@@ -16,16 +16,16 @@ chdir /home/wooh/repos
 screen -t repos 	2
 
 chdir /home/wooh/repos/ops-machinery/
-screen -t machinery 	3
-
-chdir /home/wooh/Music/ShuujiSensei
-screen -t shuujisensei 	4
+screen -t machinery-1 	3
 
 chdir /home/wooh/repos/ops-machinery/
-screen -t machinery 	5
+screen -t machinery-2 	4
 
-chdir /home/wooh/repos/ops-servers/servers
-screen -t servers 	6
+chdir /home/wooh/repos/ops-machinery/
+screen -t machinery-3 	5
+
+chdir /home/wooh/repos/gauntlet
+screen -t gauntlet 	6
 
 chdir /home/wooh/repos/ops-network/
 screen -t network  7
