@@ -370,6 +370,10 @@ export GPG_AGENT_INFO=/usr/lib/systemd/user/gpg-agent.socket
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export HISTSIZE=10000
 
+# git-remind jump
+alias grj='cd $(git remind status -n | fzf)'
+
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/wooh/.opscore/google-cloud-sdk/path.bash.inc' ]; then . '/home/wooh/.opscore/google-cloud-sdk/path.bash.inc'; fi
 
