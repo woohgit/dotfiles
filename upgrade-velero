@@ -1,0 +1,39 @@
+#!/bin/bash
+
+export PATH=$PATH:$HOME/.opscore
+
+function upgrade() {
+	echo $*
+	version=$1
+	curren_version=$2
+
+	echo "Upgrading velero to $version from $current_version"
+
+	cd /tmp
+	rm -rf "velero*"
+	wget --quiet -O "velero-$version".tar.gz https://github.com/vmware-tanzu/velero/releases/download/v"${version}"/velero-v"${version}"-linux-amd64.tar.gz
+	#https://github.com/vmware-tanzu/velero/releases/download/v1.4.0/velero-v1.4.0-linux-amd64.tar.gz
+	echo "Unachiving..."
+	tar xzf "velero-$version".tar.gz
+	echo "Installing to ~/.opscore/velero"
+	cp "velero-v$version-linux-amd64/velero" ~/.opscore/velero
+	velero version
+	rm "velero-$version".tar.gz
+	rm -rf /tmp/velero-v1.4.0-linux-amd64
+}
+
+
+
+#https://github.com/vmware-tanzu/velero/releases/latest
+
+#https://github.com/vmware-tanzu/velero/releases/download/v1.4.0/velero-v1.4.0-linux-amd64.tar.gz
+
+# velero
+version=$(curl -fsS https://api.github.com/repos/vmware-tanzu/velero/tags | jq -re '.[].name' | sed 's/^v\(.*\)$/\1/g' | sort -Vr | grep -v 'rc' | grep -v 'beta' | head -1)
+current_version=$(velero version --client-only  | grep 'Version' | cut -d ':' -f 2 | xargs echo| tr -d 'v')
+
+if [ "$version" != "$current_version" ]; then
+	upgrade "$version" "$current_version"
+else
+	echo "velero is up to date: $current_version"
+fi

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+export PATH=$PATH:$HOME/.opscore
+
+function upgrade() {
+	echo $*
+	version=$1
+	curren_version=$2
+
+	echo "Upgrading tfsec to $version from $current_version"
+
+	cd /tmp
+	rm -rf "tfsec*"
+	wget --quiet -O "tfsec-$version" https://github.com/liamg/tfsec/releases/download/v${version}/tfsec-linux-amd64
+	#https://github.com/vmware-tanzu/velero/releases/download/v1.4.0/velero-v1.4.0-linux-amd64.tar.gz
+	echo "Installing to ~/.opscore/tfsec"
+	cp "tfsec-${version}" ~/.opscore/tfsec
+	chmod +x ~/.opscore/tfsec
+	tfsec --version
+	rm "tfsec-$version"
+}
+
+
+
+#https://github.com/vmware-tanzu/velero/releases/latest
+
+#https://github.com/vmware-tanzu/velero/releases/download/v1.4.0/velero-v1.4.0-linux-amd64.tar.gz
+
+# velero
+version=$(curl -fsS https://api.github.com/repos/tfsec/tfsec/tags | jq -re '.[].name' | sed 's/^v\(.*\)$/\1/g' | sort -Vr | grep -v 'rc' | grep -v 'beta' | head -1)
+current_version=$(tfsec --version | tr -d 'v')
+
+if [ "$version" != "$current_version" ]; then
+	upgrade "$version" "$current_version"
+else
+	echo "tfsec is up to date: $current_version"
+fi

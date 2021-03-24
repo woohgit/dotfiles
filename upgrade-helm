@@ -1,0 +1,50 @@
+#!/bin/bash
+
+export PATH=$PATH:$HOME/.opscore
+
+function upgrade_helm() {
+	echo $*
+	tooling=$1
+	version=$2
+	curren_version=$3
+
+	echo "Upgrading $tooling to $version from $current_version"
+
+	cd /tmp
+	rm -rf "$tooling"*
+	wget --quiet -O "$tooling"-"$version".tar.gz https://get.helm.sh/"${tooling}"-v"${version}"-linux-amd64.tar.gz
+	echo "Unachiving..."
+	tar xzf "$tooling-$version".tar.gz
+	echo "Installing to ~/.opscore/$tooling"
+	cp "linux-amd64/$tooling" ~/.opscore/"$tooling"
+	"$tooling" version --short
+	rm "$tooling-$version".tar.gz
+	rm -rf /tmp/linux-amd64
+}
+
+# helm
+version=$(curl -fsS https://api.github.com/repos/helm/helm/tags | jq -re '.[].name' | sed 's/^v\(.*\)$/\1/g' | sort -Vr | grep -v 'rc' | grep -v 'beta' | head -1)
+current_version=$(helm version --short | cut -d '+' -f 1 | tr -d 'v')
+
+if [ "$version" != "$current_version" ]; then
+	upgrade_helm "helm" "$version" "$current_version"
+else
+	echo "Helm is up to date: $current_version"
+fi
+
+
+# helmfile
+version=$(curl -fsS https://api.github.com/repos/roboll/helmfile/tags | jq -re '.[].name' | sed 's/^v\(.*\)$/\1/g' | sort -Vr | grep -v 'rc' | grep -v 'beta' | head -1)
+current_version=$(helmfile -v | cut -d ' ' -f 3 | tr -d 'v')
+
+if [ "$version" != "$current_version" ]; then
+	echo "Upgrading helmfile to $version from $current_version"
+	cd /tmp/
+	wget -O "helmfile-${version}" "https://github.com/roboll/helmfile/releases/download/v${version}/helmfile_linux_amd64"
+	echo "Installing to ~/.opscore/helmfile"
+	mv helmfile-"${version}" ~/.opscore/helmfile
+	chmod +x ~/.opscore/helmfile
+	helmfile --version
+else
+	echo "Helmfile is up to date: $current_version"
+fi
